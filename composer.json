@@ -1,0 +1,54 @@
+{
+    "name": "lobotomised/laravel-autocrawl",
+    "description": "A tool to crawl your own laravel installation checking your HTTP status codes",
+    "homepage": "https://github.com/lobotomised/laravel-autocrawl",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/lobotomised/laravel-autocrawl/issues",
+        "source": "https://github.com/lobotomised/laravel-autocrawl"
+    },
+    "authors": [
+        {
+            "name": "lobotomised",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "spatie/crawler": "^7.1",
+        "illuminate/console": "^9.0"
+    },
+    "require-dev": {
+        "pestphp/pest-plugin-laravel": "^1.2",
+        "orchestra/testbench": "^7.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lobotomised\\Autocrawl\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Lobotomised\\Autocrawl\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        },
+        "sort-packages": true
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@php ./vendor/bin/testbench package:discover --ansi"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Lobotomised\\Autocrawl\\AutocrawlServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev"
+}
