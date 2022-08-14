@@ -1,11 +1,11 @@
 {
-    "name": "lobotomised/laravel-autocrawl",
+    "name": "lobotomised/laravel-autocrawler",
     "description": "A tool to crawl your own laravel installation checking your HTTP status codes",
-    "homepage": "https://github.com/lobotomised/laravel-autocrawl",
+    "homepage": "https://github.com/lobotomised/laravel-autocrawler",
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/lobotomised/laravel-autocrawl/issues",
-        "source": "https://github.com/lobotomised/laravel-autocrawl"
+        "issues": "https://github.com/lobotomised/laravel-autocrawler/issues",
+        "source": "https://github.com/lobotomised/laravel-autocrawler"
     },
     "authors": [
         {
