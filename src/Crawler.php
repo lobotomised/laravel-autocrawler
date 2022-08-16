@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lobotomised\Autocrawl;
+namespace Lobotomised\Autocrawler;
 
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\RequestOptions;
@@ -20,8 +20,11 @@ class Crawler
     private int $concurrency = 10;
     private bool $ignore_robots = false;
     private CrawlProfile $crawlProfile;
-    private ?string $outputFile = null;
+    private bool $shouldOutput = false;
 
+    /**
+     * @var array <string, bool|int|array<string, bool>>
+     */
     protected static array $defaultClientOptions = [
         RequestOptions::COOKIES => true,
         RequestOptions::CONNECT_TIMEOUT => 10,
@@ -31,7 +34,7 @@ class Crawler
         ],
     ];
 
-    public function setOutput(OutputInterface $output): self
+    public function setConsoleOutput(OutputInterface $output): self
     {
         $this->consoleOutput = $output;
 
@@ -83,12 +86,12 @@ class Crawler
         return $this;
     }
 
-    public function startCrawling(): void
+    public function startCrawling(): bool
     {
         $observer = new CrawlerObserver($this->consoleOutput);
 
-        if($this->outputFile) {
-            $observer->setOutputFile($this->outputFile);
+        if($this->shouldOutput) {
+            $observer->shouldOutput($this->shouldOutput);
         }
 
         $crawler = SpatieCrawler::create([])
@@ -100,15 +103,20 @@ class Crawler
             ? $crawler->ignoreRobots()
             : $crawler->respectRobots();
 
-
         $crawler->startCrawling($this->baseUrl);
+
+        foreach($observer->result() as $code => $urls) {
+            if($code >= 400) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
-    public function setOutputToFile(?string $file): self
+    public function shouldOutput(bool $output): self
     {
-        if($file) {
-            $this->outputFile = $file;
-        }
+        $this->shouldOutput = $output;
 
         return $this;
     }

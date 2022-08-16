@@ -13,23 +13,34 @@
             "role": "Developer"
         }
     ],
+    "keywords": [
+        "laravel",
+        "crawler",
+        "autocrawler"
+    ],
     "require": {
         "php": "^8.0",
-        "spatie/crawler": "^7.1",
-        "illuminate/console": "^9.0"
+        "illuminate/console": "^9.0",
+        "illuminate/filesystem": "^9.0",
+        "spatie/crawler": "^7.1"
     },
     "require-dev": {
+        "nunomaduro/collision": "^6.2",
+        "nunomaduro/larastan": "^2.1",
+        "orchestra/testbench": "^7.6",
+        "pestphp/pest": "^1.21",
         "pestphp/pest-plugin-laravel": "^1.2",
-        "orchestra/testbench": "^7.6"
+        "pestphp/pest-plugin-mock": "^1.0",
+        "phpunit/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
-            "Lobotomised\\Autocrawl\\": "src"
+            "Lobotomised\\Autocrawler\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Lobotomised\\Autocrawl\\Tests\\": "tests"
+            "Lobotomised\\Autocrawler\\Tests\\": "tests"
         }
     },
     "config": {
@@ -46,9 +57,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Lobotomised\\Autocrawl\\AutocrawlServiceProvider"
+                "Lobotomised\\Autocrawler\\AutocrawlerServiceProvider"
             ]
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

@@ -2,43 +2,68 @@
 
 declare(strict_types=1);
 
-namespace Lobotomised\Autocrawl;
+namespace Lobotomised\Autocrawler;
 
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Storage;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use Spatie\Crawler\CrawlObservers\CrawlObserver;
 use Symfony\Component\Console\Output\OutputInterface;
-use function Termwind\render;
 
 class CrawlerObserver extends CrawlObserver
 {
+    /** @var array<int, array<int, UriInterface>> */
     protected array $crawledUrls = [];
-    private ?string $filename = null;
+    private Filesystem $files;
+    private bool $shouldOutput = false;
+
+    private const DIRECTORY = 'autocrawler';
 
     public function __construct(private OutputInterface $consoleOutput)
     {
+        $this->files = new Filesystem();
+        $this->createLogDirectory();
     }
 
-    public function setOutputFile(string $filename): void
+    public function shouldOutput(bool $shouldOutput): void
     {
-        $this->filename = $filename;
+        $this->shouldOutput = $shouldOutput;
     }
 
     public function crawled(UriInterface $url, ResponseInterface $response, ?UriInterface $foundOnUrl = null): void
     {
         $this->addResult($url, $foundOnUrl, $response->getStatusCode(), $response->getReasonPhrase());
-        // TODO: Implement crawled() method.
     }
 
     public function crawlFailed(UriInterface $url, RequestException $requestException, ?UriInterface $foundOnUrl = null): void
     {
-        // TODO: Implement crawlFailed() method.
+        $response = $requestException->getResponse();
+
+        $this->addResult($url, $foundOnUrl, $response->getStatusCode(), $response->getReasonPhrase());
     }
 
     public function finishedCrawling(): void
     {
-        // TODO: Implement finishedCrawling() method.
+        $this->consoleOutput->writeln("\n<info>Crawl finished</info>");
+        $this->consoleOutput->writeln("\n<info>Results:</info>");
+
+        foreach($this->crawledUrls as $code => $urls) {
+            $count = count($urls);
+            $txt = $count > 1 ? 'founds' : 'found';
+            $colorTag = $this->getColorTag($code);
+
+            $this->consoleOutput->writeln("<$colorTag>Status $code: $count $txt</$colorTag>");
+        }
+    }
+
+    /**
+     * @return array<int, array<int, UriInterface>>
+     */
+    public function result(): array
+    {
+        return $this->crawledUrls;
     }
 
     private function addResult(UriInterface $url, ?UriInterface $foundOnUrl, int $code, string $reason): void
@@ -54,12 +79,15 @@ class CrawlerObserver extends CrawlObserver
 
         $date = date('Y-m-d H:i:s');
 
-        $message = "$code $reason -  " . $url . " found on $foundOnUrl";
+        $message = "$code $reason -  $url ";
+        if($foundOnUrl) {
+            $message .= " found on $foundOnUrl";
+        }
 
         $this->consoleOutput->writeln("<$colorTag> [$date] $message</$colorTag>");
 
-        if($this->filename && $colorTag === 'error') {
-            file_put_contents($this->filename, $message . PHP_EOL, FILE_APPEND);
+        if($this->shouldOutput && $colorTag === 'error') {
+            $this->log($message);
         }
     }
 
@@ -75,6 +103,25 @@ class CrawlerObserver extends CrawlObserver
 
         return 'error';
     }
+
+    private function createLogDirectory(): void
+    {
+        $dir_path = storage_path(self::DIRECTORY);
+
+        if(! $this->files->isDirectory( $dir_path )) {
+            if($this->files->makeDirectory($dir_path)) {
+                $this->files->put($dir_path . DIRECTORY_SEPARATOR . '.gitignore', "*\n!.gitignore\n");
+            } else {
+                throw new \Exception("Cannot create directory 'self::DIRECTORY'");
+            }
+
+        }
+
+        $this->files->delete($dir_path . DIRECTORY_SEPARATOR . 'output.txt');
+    }
+
+    private function log(string $message): void
+    {
+        $this->files->put(storage_path(self::DIRECTORY) . DIRECTORY_SEPARATOR . 'output.txt', $message);
+    }
 }
-
-

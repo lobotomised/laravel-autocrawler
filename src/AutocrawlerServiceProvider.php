@@ -2,23 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Lobotomised\Autocrawl;
+namespace Lobotomised\Autocrawler;
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
-use Lobotomised\Autocrawl\Commands\CrawlCommand;
+use Lobotomised\Autocrawler\Commands\CrawlerCommand;
 
-class AutocrawlServiceProvider extends ServiceProvider
+class AutocrawlerServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
         if($this->app->runningInConsole()) {
             $this->commands([
-                CrawlCommand::class
+                CrawlerCommand::class
             ]);
         }
     }
 
-    protected function defineEnvironment($app)
+    protected function defineEnvironment(Application $app): void
     {
         $app['config']->set('app.url', 'http://localhost');
     }
