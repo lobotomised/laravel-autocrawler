@@ -12,6 +12,10 @@ help: ## Show this help
 analyse: vendor/autoload.php ## Run phpstan
 	./vendor/bin/phpstan analyse
 
+.PHONY: start
+start: tests/server/node_modules/time.txt  ## Install the build-in webserver for the tests
+	node tests/server/server.js
+
 .PHONY: test
 test: vendor/autoload.php  ## Run units tests
 	vendor/bin/pest
@@ -28,6 +32,6 @@ vendor/autoload.php: composer.lock
 	$(composer) install
 	touch vendor/autoload.php
 
-node_modules/time.txt: package.json
-	$(npm) install
-	touch node_modules/time.txt
+tests/server/node_modules/time.txt: tests/server/package.json
+	$(npm) --prefix tests/server install
+	touch tests/server/node_modules/time.txt
