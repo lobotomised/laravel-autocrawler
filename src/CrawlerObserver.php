@@ -42,7 +42,7 @@ class CrawlerObserver extends CrawlObserver
     {
         $response = $requestException->getResponse();
 
-        $this->addResult($url, $foundOnUrl, $response->getStatusCode(), $response->getReasonPhrase());
+        $this->addResult($url, $foundOnUrl, $response?->getStatusCode() ?? 0, $response?->getReasonPhrase() ?? '');
     }
 
     public function finishedCrawling(): void
