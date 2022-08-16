@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Illuminate\Filesystem\Filesystem;
 use function Pest\Laravel\artisan;
 
 it('dont log 200 status code', function () {
@@ -14,7 +13,7 @@ it('dont log 200 status code', function () {
     expectToNotLog();
 });
 
-it('dont log 3** status code', function() {
+it('dont log 3** status code', function () {
     artisan('crawl', [
         '--output' => true,
         '--url' => 'http://localhost:8080/301',
@@ -23,7 +22,7 @@ it('dont log 3** status code', function() {
     expectToNotLog();
 });
 
-it('log 4** error', function() {
+it('log 4** error', function () {
     artisan('crawl', [
         '--output' => true,
         '--url' => 'http://localhost:8080/404',

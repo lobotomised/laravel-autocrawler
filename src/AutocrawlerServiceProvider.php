@@ -12,9 +12,9 @@ class AutocrawlerServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        if($this->app->runningInConsole()) {
+        if ($this->app->runningInConsole()) {
             $this->commands([
-                CrawlerCommand::class
+                CrawlerCommand::class,
             ]);
         }
     }

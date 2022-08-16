@@ -16,10 +16,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Crawler
 {
     private OutputInterface $consoleOutput;
+
     private UriInterface $baseUrl;
+
     private int $concurrency = 10;
+
     private bool $ignore_robots = false;
+
     private CrawlProfile $crawlProfile;
+
     private bool $shouldOutput = false;
 
     /**
@@ -43,19 +48,19 @@ class Crawler
 
     public function setUrl(UriInterface|string $url): self
     {
-        if(! $url instanceof UriInterface) {
+        if (! $url instanceof UriInterface) {
             $url = new Uri($url);
         }
-        
+
         $this->baseUrl = $url;
-        
+
         return $this;
     }
-    
+
     public function setConcurrency(int $concurrency): self
     {
         $this->concurrency = $concurrency;
-        
+
         return $this;
     }
 
@@ -75,7 +80,7 @@ class Crawler
 
     public function setCrawlProfile(bool $crawlProfile): self
     {
-        if($crawlProfile) {
+        if ($crawlProfile) {
             $this->crawlProfile = new CrawlInternalUrls($this->baseUrl);
 
             return $this;
@@ -90,7 +95,7 @@ class Crawler
     {
         $observer = new CrawlerObserver($this->consoleOutput);
 
-        if($this->shouldOutput) {
+        if ($this->shouldOutput) {
             $observer->shouldOutput($this->shouldOutput);
         }
 
@@ -105,8 +110,8 @@ class Crawler
 
         $crawler->startCrawling($this->baseUrl);
 
-        foreach($observer->result() as $code => $urls) {
-            if($code >= 400) {
+        foreach ($observer->result() as $code => $urls) {
+            if ($code >= 400) {
                 return false;
             }
         }

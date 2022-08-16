@@ -6,7 +6,6 @@ namespace Lobotomised\Autocrawler\Commands;
 
 use Illuminate\Console\Command;
 use Lobotomised\Autocrawler\Crawler;
-use phpDocumentor\Reflection\Types\Self_;
 
 class CrawlerCommand extends Command
 {
@@ -28,31 +27,29 @@ class CrawlerCommand extends Command
 
     public function handle(): int
     {
-
         $baseUrl = $this->option('url')
             ? $this->getOption('url')
             : config('app.url');
 
-        if($this->option('interactive')) {
+        if ($this->option('interactive')) {
             $concurrency = (int) $this->ask('Number of concurrent connections ?', $this->getOption('concurrency'));
             $timeout = (int) $this->ask('Max duration of a request in seconds ?', $this->getOption('timeout'));
             $baseUrl = $this->ask('Url to crawl ?', $baseUrl);
-            $output = $this->confirm('Write all non-2** ou non-3** to storage/autocrawler/output.txt', (bool)$this->option('output'));
-            $ignore_robots = $this->confirm('Should ignore rules in the /robots.txt', (bool)$this->option('ignore-robots'));
-            $ignore_external_links = $this->confirm('Ignore external links ?', (bool)$this->option('ignore-external-links'));
+            $output = $this->confirm('Write all non-2** ou non-3** to storage/autocrawler/output.txt', (bool) $this->option('output'));
+            $ignore_robots = $this->confirm('Should ignore rules in the /robots.txt', (bool) $this->option('ignore-robots'));
+            $ignore_external_links = $this->confirm('Ignore external links ?', (bool) $this->option('ignore-external-links'));
         }
 
         $result = $this->crawler->setUrl($baseUrl)
             ->setConsoleOutput($this->getOutput())
-            ->shouldOutput($output ?? (bool)$this->option('output'))
+            ->shouldOutput($output ?? (bool) $this->option('output'))
             ->setConcurrency($concurrency ?? (int) $this->option('concurrency'))
             ->setTimeout($timeout ?? (int) $this->option('timeout'))
-            ->setIgnoreRobots($ignore_robots ?? (bool)$this->option('ignore-robots'))
-            ->setCrawlProfile($ignore_external_links ?? (bool)$this->option('ignore-external-links'))
-            ->startCrawling()
-        ;
+            ->setIgnoreRobots($ignore_robots ?? (bool) $this->option('ignore-robots'))
+            ->setCrawlProfile($ignore_external_links ?? (bool) $this->option('ignore-external-links'))
+            ->startCrawling();
 
-        if($this->option('fail-on-error') && $result === false) {
+        if ($this->option('fail-on-error') && $result === false) {
             return self::FAILURE;
         }
 
@@ -63,7 +60,7 @@ class CrawlerCommand extends Command
     {
         $value = $this->option($option);
 
-        if(is_string($value) || $value === null) {
+        if (is_string($value) || $value === null) {
             return $value;
         }
 
