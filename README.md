@@ -9,12 +9,12 @@ Using this package you can check if your application have broken links.
 
 ```bash
 php artisan crawl
-200 OK -  http://myapp.test/ 
-200 OK -  http://myapp.test/login  found on http://myapp.test/
-200 OK -  http://myapp.test/register  found on http://myapp.test/
-301 301 Moved Permanently -  http://myapp.test/homepage  found on http://myapp.test/register
-404 Not Found -  http://myapp.test/brokenlink  found on http://myapp.test/register
-200 OK -  http://myapp.test/register  found on http://myapp.test/
+200 OK - http://myapp.test/ 
+200 OK - http://myapp.test/login found on http://myapp.test/
+200 OK - http://myapp.test/register found on http://myapp.test/
+301 301 Moved Permanently - http://myapp.test/homepage found on http://myapp.test/register
+404 Not Found - http://myapp.test/brokenlink found on http://myapp.test/register
+200 OK - http://myapp.test/features found on http://myapp.test/
 
 
 Crawl finished

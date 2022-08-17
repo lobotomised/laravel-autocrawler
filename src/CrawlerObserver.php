@@ -79,7 +79,7 @@ class CrawlerObserver extends CrawlObserver
 
         $date = date('Y-m-d H:i:s');
 
-        $message = "$code $reason -  $url ";
+        $message = "$code $reason - $url";
         if ($foundOnUrl) {
             $message .= " found on $foundOnUrl";
         }
