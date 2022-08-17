@@ -37,6 +37,30 @@ When crawling your site, it will automatically detect the url your application i
 APP_URL="http://myapp.test"
 ``` 
 
+## Working with GitHub actions
+To execute the crawler you first need to start a web server. You can choose to install apache or nginx. 
+Here is an example using the php build-in webserver
+```
+steps:
+  - uses: actions/checkout@v3
+  - name: Prepare The Environment
+    run: cp .env.example .env
+  - name: Install Composer Dependencies
+    run: composer install
+  - name: Generate Application Key
+    run: php artisan key:generate
+  - name: Install npm Dependencies
+    run: npm ci
+  - name: Compile assets
+    run: npm run build
+
+  - name: Start php build-in webserver
+    run: (php artisan serve &) || /bin/true
+
+  - name: Crawl website
+    run: php artisan crawl --url=http://localhost:8000/ --fail-on-error
+``` 
+
 ## Documentation
 
 All documentation is available with the command:
