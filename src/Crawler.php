@@ -111,7 +111,7 @@ class Crawler
         $crawler->startCrawling($this->baseUrl);
 
         foreach ($observer->result() as $code => $urls) {
-            if ($code >= 400) {
+            if ($code >= 400 || $code === 0) {
                 return false;
             }
         }
