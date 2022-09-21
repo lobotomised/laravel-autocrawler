@@ -121,6 +121,9 @@ class CrawlerObserver extends CrawlObserver
 
     private function log(string $message): void
     {
-        $this->files->put(storage_path(self::DIRECTORY).DIRECTORY_SEPARATOR.'output.txt', $message);
+        $this->files->append(
+            storage_path(self::DIRECTORY).DIRECTORY_SEPARATOR.'output.txt',
+            $message.PHP_EOL
+        );
     }
 }
