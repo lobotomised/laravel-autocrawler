@@ -120,7 +120,7 @@ steps:
 ``` 
 
 ## Documentation
-All commands and information are available with the command:
+All commands and informations are available with the command:
 ```bash
 php artisan crawl --help
 ```
