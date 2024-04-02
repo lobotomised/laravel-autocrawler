@@ -38,7 +38,7 @@ class CrawlerObserver extends CrawlObserver
         $this->addResult($url, $foundOnUrl, $response->getStatusCode(), $response->getReasonPhrase());
     }
 
-    public function crawlFailed(UriInterface $url, RequestException $requestException, ?UriInterface $foundOnUrl = null): void
+    public function crawlFailed(UriInterface $url, RequestException $requestException, ?UriInterface $foundOnUrl = null, ?string $linkText = null): void
     {
         $response = $requestException->getResponse();
 
