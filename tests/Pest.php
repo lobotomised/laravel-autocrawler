@@ -14,14 +14,14 @@ expect()->extend('toBeOne', function () {
 
 function expectToLog(): void
 {
-    $result = (new Filesystem())->isFile(storage_path('autocrawler/output.txt'));
+    $result = (new Filesystem)->isFile(storage_path('autocrawler/output.txt'));
 
     expect($result)->toBeTrue();
 }
 
 function expectToNotLog(): void
 {
-    $result = (new Filesystem())->isFile(storage_path('autocrawler/output.txt'));
+    $result = (new Filesystem)->isFile(storage_path('autocrawler/output.txt'));
 
     expect($result)->toBeFalse();
 }

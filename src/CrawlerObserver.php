@@ -24,7 +24,7 @@ class CrawlerObserver extends CrawlObserver
 
     public function __construct(private OutputInterface $consoleOutput)
     {
-        $this->files = new Filesystem();
+        $this->files = new Filesystem;
         $this->createLogDirectory();
     }
 
