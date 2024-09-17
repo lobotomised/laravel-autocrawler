@@ -86,7 +86,7 @@ class Crawler
             return $this;
         }
 
-        $this->crawlProfile = new CrawlAllUrls();
+        $this->crawlProfile = new CrawlAllUrls;
 
         return $this;
     }
